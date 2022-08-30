@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bolo;
 use Illuminate\Http\Request;
 
 class BoloController extends Controller
@@ -13,7 +14,7 @@ class BoloController extends Controller
      */
     public function index()
     {
-        //
+        return Bolo::orderBy('nome')->get();
     }
 
     /**
@@ -34,6 +35,17 @@ class BoloController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
         //
     }
