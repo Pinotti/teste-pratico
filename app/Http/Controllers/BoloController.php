@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BoloRequest;
 use App\Models\Bolo;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,9 @@ class BoloController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BoloRequest $request)
     {
-        //
+        echo "Passou na validação";
     }
 
     /**
