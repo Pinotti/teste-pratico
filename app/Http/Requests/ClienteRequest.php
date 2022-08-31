@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BoloRequest extends FormRequest
+class ClienteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,26 +23,23 @@ class BoloRequest extends FormRequest
      */
     public function rules()
     {
-        dd($this->wantsJson());
-
         if ($this->wantsJson()) {
             return [
                 'nome' => 'required',
-                'peso' => 'required',
-                'valor' => 'required',
-                'quantidade' => 'required'
+                'email' => 'required|email'
             ];
         }
 
         return [
-
+            'nome' => 'required'
         ];
     }
 
-    public function messages ()
+    public function messages()
     {
         return [
-            'required' => ':attribute - campo obrigatorio'
+            'required' => ':attribute - campo obrigatorio',
+            'email.email' => 'Email com formato invalido'
         ];
     }
 }
