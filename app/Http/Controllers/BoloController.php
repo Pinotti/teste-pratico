@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BoloRequest;
 use App\Models\Bolo;
+use Exception;
 use Illuminate\Http\Request;
 
 class BoloController extends Controller
@@ -15,62 +16,100 @@ class BoloController extends Controller
      */
     public function index()
     {
-        return Bolo::orderBy('nome')->get();
+        $dados = Bolo::orderBy('nome')->get();
+        $sucesso = true;
+        $mensagem = 'Busca realizada com sucesso';
+        
+        return response([
+            'succes' => $sucesso,
+            'message' => $mensagem,
+            'response' => $dados
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\BoloRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(BoloRequest $request)
     {
-        echo "Passou na validação";
+        $dados = variaveisInsert();
+
+        try {
+            Bolo::create($request->all());
+        } catch (Exception $e) {
+            $dados = setVariaveisErro($e->getMessage());
+        }
+
+        return returnDefault($dados['sucesso'], $dados['mensagem'], array(), $dados['status']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
-    }
+        try {
+            $dados = variaveisGet();
+            $dados['registros'] = Bolo::find($request['id']);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+            if (!$dados['registros']) {
+                $dados = setVariaveisNaoEncontrado();
+                $dados['registros'] = array();
+            }
+        } catch (Exception $e) {
+            $dados = setVariaveisErro($e->getMessage());
+        }
+
+        return returnDefault($dados['sucesso'], $dados['mensagem'], $dados['registros'], $dados['status']);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\BoloRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BoloRequest $request)
     {
-        //
+        try {
+            $dados = setVariaveisNaoEncontrado();
+            $bolo = Bolo::find($request->input('id'));
+            if ($bolo) {
+                $bolo->update($request->all());
+                $dados = variaveisUpdate();
+            }
+        } catch (Exception $e) {
+            $dados = setVariaveisErro($e->getMessage());
+        }
+
+        return returnDefault($dados['sucesso'], $dados['mensagem'], array(), $dados['status']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Http\Requests\BoloRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            $dados = setVariaveisNaoEncontrado();
+            $bolo = Bolo::find($request->id);
+            if ($bolo) {
+                $bolo->delete();
+                $dados = variaveisDelete();
+            }
+        } catch (Exception $e) {
+            $dados = setVariaveisErro($e->getMessage());
+        }
+
+        return returnDefault($dados['sucesso'], $dados['mensagem'], array(), $dados['status']);
     }
 }
