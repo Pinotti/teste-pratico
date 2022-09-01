@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClienteRequest;
+use App\Http\Resources\ClienteCollection;
+use App\Http\Resources\ClienteResource;
 use App\Models\Cliente;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,15 +18,7 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $dados = Cliente::orderBy('nome')->get();
-        $sucesso = true;
-        $mensagem = 'Busca realizada com sucesso';
-        
-        return response([
-            'succes' => $sucesso,
-            'message' => $mensagem,
-            'response' => $dados
-        ]);
+        return new ClienteCollection(Cliente::all());
     }
 
     /**
@@ -54,19 +48,7 @@ class ClienteController extends Controller
      */
     public function show(Request $request)
     {
-        try {
-            $dados = variaveisGet();
-            $dados['registros'] = Cliente::find($request['id']);
-
-            if (!$dados['registros']) {
-                $dados = setVariaveisNaoEncontrado();
-                $dados['registros'] = array();
-            }
-        } catch (Exception $e) {
-            $dados = setVariaveisErro($e->getMessage());
-        }
-
-        return returnDefault($dados['sucesso'], $dados['mensagem'], $dados['registros'], $dados['status']);
+        return new ClienteResource(Cliente::findOrFail($request['id']));
     }
 
     /**

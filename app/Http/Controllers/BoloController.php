@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BoloRequest;
+use App\Http\Resources\BoloCollection;
+use App\Http\Resources\BoloResource;
 use App\Models\Bolo;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,15 +18,7 @@ class BoloController extends Controller
      */
     public function index()
     {
-        $dados = Bolo::orderBy('nome')->get();
-        $sucesso = true;
-        $mensagem = 'Busca realizada com sucesso';
-        
-        return response([
-            'succes' => $sucesso,
-            'message' => $mensagem,
-            'response' => $dados
-        ]);
+        return new BoloCollection(Bolo::all());
     }
 
     /**
@@ -54,19 +48,7 @@ class BoloController extends Controller
      */
     public function show(Request $request)
     {
-        try {
-            $dados = variaveisGet();
-            $dados['registros'] = Bolo::find($request['id']);
-
-            if (!$dados['registros']) {
-                $dados = setVariaveisNaoEncontrado();
-                $dados['registros'] = array();
-            }
-        } catch (Exception $e) {
-            $dados = setVariaveisErro($e->getMessage());
-        }
-
-        return returnDefault($dados['sucesso'], $dados['mensagem'], $dados['registros'], $dados['status']);
+        return new BoloResource(Bolo::findOrFail($request['id']));
     }
 
     /**
