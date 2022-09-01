@@ -15,4 +15,9 @@ class Bolo extends Model
         'valor',
         'quantidade'
     ];
+
+    public function clientes()
+    {
+        return $this->belongsToMany(Cliente::class);
+    }
 }

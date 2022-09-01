@@ -23,8 +23,6 @@ class BoloRequest extends FormRequest
      */
     public function rules()
     {
-        dd($this->wantsJson());
-
         if ($this->wantsJson()) {
             return [
                 'nome' => 'required',

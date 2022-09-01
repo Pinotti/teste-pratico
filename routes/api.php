@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BoloClienteController;
 use App\Http\Controllers\BoloController;
 use App\Http\Controllers\ClienteController;
 use Illuminate\Http\Request;
@@ -18,5 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResources([
     'bolos' => BoloController::class,
-    'clientes' => ClienteController::class
+    'clientes' => ClienteController::class,
+    'bolo_clientes' => BoloClienteController::class
 ]);

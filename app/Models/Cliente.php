@@ -13,4 +13,9 @@ class Cliente extends Model
         'nome',
         'email'
     ];
+
+    public function bolos()
+    {
+        return $this->belongsToMany(Bolo::class);
+    }
 }
