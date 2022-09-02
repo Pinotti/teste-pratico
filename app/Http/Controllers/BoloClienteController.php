@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\BoloClienteCollection;
+use App\Jobs\EnviarEmail;
+use App\Models\Bolo;
 use App\Models\BoloCliente;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,7 +21,11 @@ class BoloClienteController extends Controller
         $dados = variaveisInsert();
 
         try {
-            BoloCliente::create($request->all());
+            $boloCliente = BoloCliente::create($request->all());
+            $bolo = Bolo::find($boloCliente->bolo_id);
+            if($bolo->quantidade > 0) {
+                EnviarEmail::dispatch($bolo);
+            }
         } catch (Exception $e) {
             $dados = setVariaveisErro($e->getMessage());
         }
@@ -28,26 +33,4 @@ class BoloClienteController extends Controller
         return returnDefault($dados['sucesso'], $dados['mensagem'], array(), $dados['status']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

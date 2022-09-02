@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BoloRequest;
 use App\Http\Resources\BoloCollection;
 use App\Http\Resources\BoloResource;
+use App\Jobs\EnviarEmail;
 use App\Models\Bolo;
 use Exception;
 use Illuminate\Http\Request;
@@ -65,6 +66,9 @@ class BoloController extends Controller
             if ($bolo) {
                 $bolo->update($request->all());
                 $dados = variaveisUpdate();
+                if ($request->quantidade > 0) {
+                    EnviarEmail::dispatch($bolo);
+                }                
             }
         } catch (Exception $e) {
             $dados = setVariaveisErro($e->getMessage());
