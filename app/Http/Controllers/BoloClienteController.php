@@ -2,30 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BoloClienteCollection;
 use App\Models\BoloCliente;
 use Exception;
 use Illuminate\Http\Request;
 
 class BoloClienteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $dados = BoloCliente::all();
-        $sucesso = true;
-        $mensagem = 'Busca realizada com sucesso';
-        
-        return response([
-            'succes' => $sucesso,
-            'message' => $mensagem,
-            'response' => $dados
-        ]);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -43,28 +26,6 @@ class BoloClienteController extends Controller
         }
 
         return returnDefault($dados['sucesso'], $dados['mensagem'], array(), $dados['status']);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

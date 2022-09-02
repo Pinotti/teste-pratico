@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Cliente;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BoloResource extends JsonResource
@@ -19,7 +20,10 @@ class BoloResource extends JsonResource
             'nome' => $this->nome,
             'peso' => $this->peso,
             'valor' => $this->valor,
-            'quantidade' => $this->quantidade
+            'quantidade' => $this->quantidade,
+            'interessados' => [
+                new ClienteCollection(Cliente::find($this->clientes->pluck('pivot.cliente_id')->all()))
+            ]
         ];
     }
 }
